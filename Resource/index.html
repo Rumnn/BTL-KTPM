@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý sinh viên</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body onload="renderListStudent()">
+    <div class="form-student">
+        <h3>Thông tin sinh viên</h3>
+        <label>Họ và tên</label>
+        <input type="text" id="fullname">
+        <span id="fullname-error" class="error"></span>
+        <br>
+
+        <label>Địa chỉ email</label>
+        <input type="text" id="email">
+        <span id="email-error" class="error"></span>
+        <br>
+
+        <label>Số điện thoại</label>
+        <input type="text" id="phone">
+        <span id="phone-error" class="error"></span>
+        <br>
+
+        <label>Địa chỉ</label>
+        <input type="text" id="address">
+        <span id="address-error" class="error"></span>
+        <br>
+
+        <label>Giới tính</label>
+        <input type="radio" name="gender" id="male" value="1"> Nam
+        <input type="radio" name="gender" id="famale" value="2"> Nữ
+        <span id="gender-error" class="error"></span>
+        <br>
+        
+        <label>&nbsp;</label>
+        <br>
+        <button onclick="save()">Lưu lại</button>
+    </div>
+
+    <div class="list-student" id="list-student">
+        <h3>Danh sách sinh viên</h3>
+        <table id="grid-students" width="650" border="1" cellpadding="0">     
+        </table>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+    <script src="../js/student.js"></script>
+</body>
+</html>
