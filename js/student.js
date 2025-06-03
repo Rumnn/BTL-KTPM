@@ -66,6 +66,12 @@ function save() {
 
         let students = localStorage.getItem('students') ? JSON.parse(localStorage.getItem('students')) : [];
 
+        let emailExists = students.some(student => student.email === email);
+        if (emailExists) {
+            document.getElementById('email-error').innerHTML = 'Email đã tồn tại';
+            return;
+        }
+        
         students.push({
             fullname: fullname,
             email: email,
