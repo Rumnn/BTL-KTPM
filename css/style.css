@@ -1,39 +1,87 @@
-body{
-    padding: 0px;
-    margin: 0px;
+body {
+    padding: 0;
+    margin: 0;
+    font-family: Arial, sans-serif;
 }
 
-div.form-student, div.list-student{
+div.form-student,
+div.list-student {
     width: 500px;
     border: 1px solid #ccc;
     margin: 25px;
     padding: 10px;
+    border-radius: 6px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    background-color: #fff;
     float: left;
 }
 
-div.list-student{
+div.list-student {
     width: 650px;
 }
 
-h3{
-    padding: 0px;
-    margin-top: 0px;
+h3 {
+    padding: 0;
+    margin-top: 0;
 }
 
-div.form-student label{
+div.form-student label {
     width: 100px;
-    float: left;
+    display: inline-block;
+    margin-bottom: 5px;
 }
 
-div.form-student input[type="text"], button{
+div.form-student input[type="text"],
+button {
     margin-bottom: 10px;
     width: 200px;
     padding: 5px;
+    display: inline-block;
 }
 
-button{
+button {
     margin-top: 15px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s;
+    border-radius: 4px;
 }
-.error{
+
+button:hover {
+    background-color: #45a049;
+}
+
+.error {
     color: red;
+    font-size: 13px;
+    margin-left: 105px;
+    display: block;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 10px;
+}
+
+table td {
+    padding: 8px 10px;
+    text-align: left;
+    border: 1px solid #ccc;
+}
+
+table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+a {
+    color: #007BFF;
+    text-decoration: none;
+    margin: 0 5px;
+}
+
+a:hover {
+    text-decoration: underline;
 }
