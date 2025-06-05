@@ -1,5 +1,5 @@
 function emailIsValid(email) {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+    return /^\d{8}@st\.phenikaa-uni\.edu\.vn$/.test(email);
 }
 
 function save() {
@@ -195,4 +195,61 @@ function copyStudent(id) {
 
     document.getElementById('edit-id').value = ''; // để đảm bảo đây là thêm mới
     document.getElementById('save-btn').innerText = 'Thêm mới';
+}
+
+function searchStudents() {
+    const keyword = document.getElementById("search-keyword").value.toLowerCase();
+    const genderFilter = document.getElementById("gender-filter").value;
+    const students = JSON.parse(localStorage.getItem("students")) || [];
+
+    const filtered = students.filter(student => {
+        const matchText = (
+            student.fullname.toLowerCase().includes(keyword) ||
+            student.email.toLowerCase().includes(keyword) ||
+            student.phone.includes(keyword)
+        );
+
+        const matchGender = genderFilter ? student.gender === genderFilter : true;
+
+        return matchText && matchGender;
+    });
+
+    renderSearchResult(filtered);
+}
+
+function renderSearchResult(filteredStudents) {
+    const table = document.getElementById("search-student-table");
+    const resultDiv = document.getElementById("search-result");
+
+    if (filteredStudents.length === 0) {
+        resultDiv.style.display = "none";
+        table.innerHTML = "";
+        return;
+    }
+
+    resultDiv.style.display = "block";
+
+    let html = `<tr>
+        <td>NO</td>
+        <td>Họ và tên</td>
+        <td>Mã sinh viên</td>
+        <td>Email</td>
+        <td>SĐT</td>
+        <td>Giới tính</td>
+        <td>Địa chỉ</td>
+    </tr>`;
+
+    filteredStudents.forEach((student, index) => {
+        html += `<tr>
+            <td>${index + 1}</td>
+            <td>${student.fullname}</td>
+            <td>${student.code}</td>
+            <td>${student.email}</td>
+            <td>${student.phone}</td>
+            <td>${student.gender == '1' ? 'Nam' : 'Nữ'}</td>
+            <td>${student.address}</td>
+        </tr>`;
+    });
+
+    table.innerHTML = html;
 }
