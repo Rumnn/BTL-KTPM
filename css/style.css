@@ -1,63 +1,101 @@
+/* ==== RESET ==== */
 body {
     padding: 0;
     margin: 0;
     font-family: Arial, sans-serif;
+    background-color: #f0f2f5;
 }
 
-div.form-student,
-div.list-student {
-    width: 500px;
+/* ==== BỐ CỤC 2 CỘT ==== */
+.main-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* ==== BÊN TRÁI ==== */
+.left-panel {
+    flex: 1;
+    min-width: 340px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* ==== BÊN PHẢI ==== */
+.right-panel {
+    flex: 2;
+    min-width: 400px;
+}
+
+/* ==== FORM THÔNG TIN SINH VIÊN ==== */
+div.form-student {
     border: 1px solid #ccc;
-    margin: 25px;
-    padding: 10px;
-    border-radius: 6px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    background-color: #fff;
-    float: left;
-}
-
-div.list-student {
-    width: 650px;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    box-shadow: 0px 2px 5px rgba(0,0,0,0.1);
 }
 
 h3 {
-    padding: 0;
     margin-top: 0;
+    margin-bottom: 15px;
+    color: #333;
 }
 
 div.form-student label {
-    width: 100px;
+    width: 120px;
     display: inline-block;
     margin-bottom: 5px;
+    color: #555;
 }
 
 div.form-student input[type="text"],
-button {
+div.form-student input[type="email"],
+div.form-student select {
     margin-bottom: 10px;
-    width: 200px;
-    padding: 5px;
+    width: calc(100% - 130px);
+    padding: 6px 8px;
     display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
 }
 
+/* ==== NÚT LƯU ==== */
 button {
     margin-top: 15px;
     background-color: #4CAF50;
     color: white;
     border: none;
-    cursor: pointer;
-    transition: background 0.3s;
+    padding: 8px 16px;
     border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.3s;
 }
 
 button:hover {
     background-color: #45a049;
 }
 
+/* ==== THÔNG BÁO LỖI ==== */
 .error {
     color: red;
     font-size: 13px;
-    margin-left: 105px;
+    margin-left: 130px;
     display: block;
+}
+
+/* ==== DANH SÁCH SINH VIÊN ==== */
+div.list-student {
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    box-shadow: 0px 2px 5px rgba(0,0,0,0.1);
 }
 
 table {
@@ -66,14 +104,19 @@ table {
     margin-top: 10px;
 }
 
-table td {
-    padding: 8px 10px;
+table th, table td {
+    padding: 10px;
     text-align: left;
     border: 1px solid #ccc;
+    font-size: 14px;
 }
 
 table tr:nth-child(even) {
     background-color: #f9f9f9;
+}
+
+table tr:hover {
+    background-color: #f1f1f1;
 }
 
 a {
@@ -84,4 +127,74 @@ a {
 
 a:hover {
     text-decoration: underline;
+}
+
+/* ==== PANEL TÌM KIẾM ==== */
+.search-panel {
+    background-color: #f7f7f7;
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.search-panel input[type="text"],
+.search-panel select {
+    padding: 8px 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: 100%;
+    margin-bottom: 10px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.search-panel button {
+    background-color: #007bff;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+.search-panel button:hover {
+    background-color: #0056b3;
+}
+
+/* ==== KẾT QUẢ TÌM KIẾM ==== */
+.search-result {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.search-result h4 {
+    margin-bottom: 10px;
+    color: #333;
+}
+
+#search-student-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#search-student-table th,
+#search-student-table td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: center;
+    font-size: 14px;
+}
+
+#search-student-table tr:nth-child(odd) {
+    background-color: #f9f9f9;
+}
+
+#search-student-table tr:hover {
+    background-color: #f1f1f1;
 }
