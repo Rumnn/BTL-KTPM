@@ -4,6 +4,7 @@ function emailIsValid(email) {
 
 function save() {
     let fullname = document.getElementById('fullname').value;
+    let code = document.getElementById('code').value;
     let email = document.getElementById('email').value;
     let phone = document.getElementById('phone').value;
     let address = document.getElementById('address').value;
@@ -15,90 +16,110 @@ function save() {
         gender = document.getElementById('famale').value;
     }
 
-    if (_.isEmpty(fullname)) {
+    // Validate
+    if (_.isEmpty(fullname) || fullname.trim().length <= 2 || fullname.trim().length > 50) {
+        document.getElementById('fullname-error').innerHTML = 'Họ tên phải từ 3 đến 50 ký tự';
         fullname = '';
-        document.getElementById('fullname-error').innerHTML = 'Vui lòng nhập họ và tên';
-    } else if (fullname.trim().length <= 2) {
-        fullname = '';
-        document.getElementById('fullname-error').innerHTML = 'Không được nhỏ hơn 2 ký tự';
-    } else if (fullname.trim().length > 50) {
-        fullname = '';
-        document.getElementById('fullname-error').innerHTML = 'Không được lớn hơn 50 ký tự';
     } else {
         document.getElementById('fullname-error').innerHTML = '';
     }
 
-    if (_.isEmpty(email)) {
+    if (_.isEmpty(code) || code.trim().length !== 8) {
+        document.getElementById('code-error').innerHTML = 'Mã sinh viên phải có đúng 8 ký tự';
+        code = '';
+    } else {
+        document.getElementById('code-error').innerHTML = '';
+    }
+
+    if (_.isEmpty(email) || !emailIsValid(email)) {
+        document.getElementById('email-error').innerHTML = 'Email không hợp lệ';
         email = '';
-        document.getElementById('email-error').innerHTML = 'Vui lòng nhập email của bạn';
-    } else if (!emailIsValid(email)) {
-        email = '';
-        document.getElementById('email-error').innerHTML = 'Email không đúng định dạng';
     } else {
         document.getElementById('email-error').innerHTML = '';
     }
 
-    if (_.isEmpty(phone)) {
-        phone = '';
-        document.getElementById('phone-error').innerHTML = 'Vui lòng nhập số điện thoại';
-    } else if (!/^\d{10}$/.test(phone.trim())) {
-        phone = '';
+    if (_.isEmpty(phone) || !/^\d{10}$/.test(phone.trim())) {
         document.getElementById('phone-error').innerHTML = 'Số điện thoại phải gồm 10 chữ số';
+        phone = '';
     } else {
         document.getElementById('phone-error').innerHTML = '';
     }
 
     if (_.isEmpty(address)) {
-        address = '';
         document.getElementById('address-error').innerHTML = 'Vui lòng nhập địa chỉ';
+        address = '';
     } else {
         document.getElementById('address-error').innerHTML = '';
     }
 
     if (_.isEmpty(gender)) {
-        gender = '';
         document.getElementById('gender-error').innerHTML = 'Vui lòng chọn giới tính';
+        gender = '';
     } else {
         document.getElementById('gender-error').innerHTML = '';
     }
 
-    if (fullname && email && phone && address && gender) {
-
+    if (fullname && code && email && phone && address && gender) {
         let students = localStorage.getItem('students') ? JSON.parse(localStorage.getItem('students')) : [];
+        let editId = document.getElementById('edit-id').value;
 
-        let emailExists = students.some(student => student.email === email);
-        if (emailExists) {
-            document.getElementById('email-error').innerHTML = 'Email đã tồn tại';
-            return;
+        if (editId !== '') {
+            // Update sinh viên
+            students[editId] = { fullname, code, email, phone, address, gender };
+            document.getElementById('save-btn').innerText = 'Thêm mới';
+            document.getElementById('edit-id').value = '';
+        } else {
+            // Kiểm tra trùng email khi thêm mới
+            let emailExists = students.some(student => student.email === email);
+            if (emailExists) {
+                document.getElementById('email-error').innerHTML = 'Email đã tồn tại';
+                return;
+            }
+
+            let phoneExists = students.some(student => student.phone === phone);
+            if (phoneExists) {
+                document.getElementById('phone-error').innerHTML = 'Số điện thoại đã tồn tại';
+                return;
+            }
+
+            students.push({ fullname, code, email, phone, address, gender });
         }
-        
-        students.push({
-            fullname: fullname,
-            email: email,
-            phone: phone,
-            address: address,
-            gender: gender,
-        });
 
         localStorage.setItem('students', JSON.stringify(students));
-
+        clearForm();
         renderListStudent();
     }
 }
 
-function renderListStudent(){
+function clearForm() {
+    document.getElementById('fullname').value = '';
+    document.getElementById('code').value = '';
+    document.getElementById('email').value = '';
+    document.getElementById('phone').value = '';
+    document.getElementById('address').value = '';
+    document.getElementById('male').checked = false;
+    document.getElementById('famale').checked = false;
+    document.getElementById('edit-id').value = '';
+    document.getElementById('save-btn').innerText = 'Thêm mới';
+}
+
+function renderListStudent() {
     let students = localStorage.getItem('students') ? JSON.parse(localStorage.getItem('students')) : [];
 
-    if(students.length === 0) {
-        document.getElementById('list-student').style.display = 'none';
-        return false;
-    } 
-    
-    document.getElementById('list-student').style.display = 'block';
+    let listContainer = document.getElementById('list-student');
+
+    if (students.length === 0) {
+        listContainer.style.display = 'none';
+        document.getElementById('grid-students').innerHTML = ''; // clear bảng
+        return;
+    }
+
+    listContainer.style.display = 'block';
 
     let tableContent = `<tr>
-        <td width='20'>#</td>
+        <td width='20'>NO</td>
         <td>Họ và tên</td>
+        <td>Mã sinh viên</td>
         <td>Email</td>
         <td>Điện thoại</td>
         <td>Giới tính</td>
@@ -109,17 +130,19 @@ function renderListStudent(){
     students.forEach((student, index) => {
         let studentId = index;
         let genderLabel = parseInt(student.gender) === 1 ? 'Nam' : 'Nữ';
-        index++;
 
         tableContent += `<tr>
-            <td>${index}</td>
+            <td>${index + 1}</td>
             <td>${student.fullname}</td>
+            <td>${student.code}</td>
             <td>${student.email}</td>
             <td>${student.phone}</td>
             <td>${genderLabel}</td>
             <td>${student.address}</td>
             <td>
-                <a href="#">Edit</a> | <a href="#"  onclick='deleteStudent(${studentId})'>Delete</a>
+                <a href="#" onclick='editStudent(${studentId})'>Sửa</a> | 
+                <a href="#" onclick='deleteStudent(${studentId})'>Xóa</a> | 
+                <a href="#" onclick='copyStudent(${studentId})'>Copy</a>
             </td>
         </tr>`;
     });
@@ -132,4 +155,44 @@ function deleteStudent(id){
     students.splice(id, 1);
     localStorage.setItem('students', JSON.stringify(students));
     renderListStudent();
+}
+
+function editStudent(id) {
+    let students = localStorage.getItem('students') ? JSON.parse(localStorage.getItem('students')) : [];
+    let student = students[id];
+
+    document.getElementById('fullname').value = student.fullname;
+    document.getElementById('code').value = student.code;
+    document.getElementById('email').value = student.email;
+    document.getElementById('phone').value = student.phone;
+    document.getElementById('address').value = student.address;
+
+    if (parseInt(student.gender) === 1) {
+        document.getElementById('male').checked = true;
+    } else {
+        document.getElementById('famale').checked = true;
+    }
+
+    document.getElementById('edit-id').value = id;
+    document.getElementById('save-btn').innerText = 'Cập nhật';
+}
+
+function copyStudent(id) {
+    let students = localStorage.getItem('students') ? JSON.parse(localStorage.getItem('students')) : [];
+    let student = students[id];
+
+    document.getElementById('fullname').value = student.fullname;
+    document.getElementById('code').value = student.code; // <-- hiển thị mã sinh viên
+    document.getElementById('email').value = student.email;
+    document.getElementById('phone').value = student.phone;
+    document.getElementById('address').value = student.address;
+
+    if (parseInt(student.gender) === 1) {
+        document.getElementById('male').checked = true;
+    } else {
+        document.getElementById('famale').checked = true;
+    }
+
+    document.getElementById('edit-id').value = ''; // để đảm bảo đây là thêm mới
+    document.getElementById('save-btn').innerText = 'Thêm mới';
 }
