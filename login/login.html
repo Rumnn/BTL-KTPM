@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Đăng nhập</title>
+  <link rel="stylesheet" href="login.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+
+<body>
+  <div class="login-box">
+    <h2>ĐĂNG NHẬP</h2>
+
+    <div id="error" class="error-message"></div>
+
+    <div class="input-group">
+      <i class="fa fa-user"></i>
+      <input type="text" id="username" placeholder="Nhập tài khoản hoặc email" />
+    </div>
+
+    <div class="input-group">
+      <i class="fa fa-key"></i>
+      <input type="password" id="password" placeholder="Nhập mật khẩu" />
+      <i class="fa fa-eye-slash toggle-password" id="togglePass"></i>
+    </div>
+
+    <div class="options">
+      <a href="#">Quên mật khẩu</a>
+      <a href="#">❓ Trợ giúp!</a>
+    </div>
+
+    <button class="login-btn" onclick="login()">ĐĂNG NHẬP</button>
+  </div>
+
+  <script>
+    const togglePass = document.getElementById("togglePass");
+    const passwordInput = document.getElementById("password");
+
+    togglePass.addEventListener("click", () => {
+      const isHidden = passwordInput.type === "password";
+      passwordInput.type = isHidden ? "text" : "password";
+      togglePass.classList.toggle("fa-eye");
+      togglePass.classList.toggle("fa-eye-slash");
+    });
+
+    function login() {
+      const user = document.getElementById("username").value.trim();
+      const pass = document.getElementById("password").value.trim();
+      const errorBox = document.getElementById("error");
+
+      if (!user || !pass) {
+        errorBox.textContent = "Vui lòng nhập đầy đủ tài khoản và mật khẩu.";
+        return;
+      }
+
+      if (user === "admin" && pass === "123456") {
+        localStorage.setItem("user", user);
+        window.location.href = "../html/index.html";
+      } else {
+        errorBox.textContent = "Tài khoản hoặc mật khẩu không đúng!";
+      }
+    }
+  </script>
+</body>
+
+</html>
