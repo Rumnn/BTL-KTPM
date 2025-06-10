@@ -1,91 +1,288 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Segoe UI', sans-serif;
-}
-
+/* ==== RESET ==== */
 body {
-  background: linear-gradient(to right, #6db0ff, #a1c9ff);
+    padding: 0;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f0f2f5;
+}
+
+/* ==== BỐ CỤC 2 CỘT ==== */
+.main-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* ==== BÊN TRÁI ==== */
+.left-panel {
+    flex: 1;
+    min-width: 340px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* ==== BÊN PHẢI ==== */
+.right-panel {
+    flex: 2;
+    min-width: 400px;
+}
+
+/* ==== FORM THÔNG TIN SINH VIÊN ==== */
+div.form-student {
+    border: 1px solid #ccc;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    box-shadow: 0px 2px 5px rgba(0,0,0,0.1);
+}
+
+h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+div.form-student label {
+    width: 120px;
+    display: inline-block;
+    margin-bottom: 5px;
+    color: #555;
+}
+
+div.form-student input[type="text"],
+div.form-student input[type="email"],
+div.form-student select {
+    margin-bottom: 10px;
+    width: calc(100% - 130px);
+    padding: 6px 8px;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+/* ==== NÚT LƯU ==== */
+button {
+    margin-top: 15px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.3s;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+/* ==== THÔNG BÁO LỖI ==== */
+.error {
+    color: red;
+    font-size: 13px;
+    margin-left: 130px;
+    display: block;
+}
+
+/* ==== DANH SÁCH SINH VIÊN ==== */
+div.list-student {
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    box-shadow: 0px 2px 5px rgba(0,0,0,0.1);
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 10px;
+}
+
+table th, table td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+
+table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+table tr:hover {
+    background-color: #f1f1f1;
+}
+
+a {
+    color: #007BFF;
+    text-decoration: none;
+    margin: 0 5px;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* ==== PANEL TÌM KIẾM ==== */
+.search-panel {
+    background-color: #f7f7f7;
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.search-panel input[type="text"],
+.search-panel select {
+    padding: 8px 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: 100%;
+    margin-bottom: 10px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.search-panel button {
+    background-color: #007bff;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+.search-panel button:hover {
+    background-color: #0056b3;
+}
+
+/* ==== KẾT QUẢ TÌM KIẾM ==== */
+.search-result {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.search-result h4 {
+    margin-bottom: 10px;
+    color: #333;
+}
+
+#search-student-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#search-student-table th,
+#search-student-table td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: center;
+    font-size: 14px;
+}
+
+#search-student-table tr:nth-child(odd) {
+    background-color: #f9f9f9;
+}
+
+#search-student-table tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* DASHBOARD GIAO DIỆN CHÍNH */
+.dashboard-container {
+  display: flex;
   height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
-.login-box {
-  background-color: #eaf2ff;
-  padding: 40px 30px;
-  border-radius: 16px;
-  width: 360px;
-  text-align: center;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
-  position: relative;
-}
-
-.login-box h2 {
-  margin-bottom: 30px;
-  color: #143b75;
-  font-size: 24px;
-  font-weight: bold;
-}
-
-.input-group {
-  display: flex;
-  align-items: center;
-  background: #fff;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  padding: 10px 12px;
-  margin-bottom: 20px;
-  position: relative;
-}
-
-.input-group i {
-  color: #555;
-  margin-right: 10px;
-  font-size: 16px;
-}
-
-.input-group input {
-  border: none;
-  outline: none;
-  width: 100%;
-  font-size: 14px;
-}
-
-.input-group .toggle-password {
-  position: absolute;
-  right: 12px;
-  cursor: pointer;
-}
-
-.options {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.9rem;
-  margin-bottom: 20px;
-  color: #143b75;
-}
-
-.options a {
-  text-decoration: none;
-  color: #143b75;
-}
-
-.login-btn {
-  width: 100%;
-  padding: 12px;
-  background-color: #143b75;
+.sidebar {
+  width: 220px;
+  background-color: #343a40;
   color: white;
-  border: none;
-  border-radius: 10px;
-  font-weight: bold;
-  cursor: pointer;
-  font-size: 16px;
-  transition: 0.3s;
+  padding: 20px;
 }
 
-.login-btn:hover {
-  background-color: #0c2d61;
+.sidebar h2 {
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar li {
+  margin: 10px 0;
+}
+
+.sidebar a {
+  color: white;
+  text-decoration: none;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+}
+
+.sidebar a i {
+  margin-right: 10px;
+}
+
+.sidebar a:hover {
+  color: #17a2b8;
+}
+
+.main-content {
+  flex-grow: 1;
+  padding: 20px;
+  overflow-y: auto;
+  background-color: #fff;
+}
+
+.header {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-bottom: 20px;
+  font-size: 16px;
+}
+
+.stats {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.stat-box {
+  flex: 1;
+  background-color: #e9ecef;
+  padding: 15px;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 18px;
+}
+
+.logout-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background-color: #dc3545;
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.logout-btn:hover {
+    background-color: #c82333;
 }
