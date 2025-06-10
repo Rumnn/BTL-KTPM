@@ -148,13 +148,16 @@ function renderListStudent() {
     });
 
     document.getElementById('grid-students').innerHTML = tableContent;
+
+    updateStatistics();
 }
 
-function deleteStudent(id){
-    let students = localStorage.getItem('students') ? JSON.parse(localStorage.getItem('students')) : []; 
+function deleteStudent(id) {
+    let students = localStorage.getItem('students') ? JSON.parse(localStorage.getItem('students')) : [];
     students.splice(id, 1);
     localStorage.setItem('students', JSON.stringify(students));
     renderListStudent();
+    updateStatistics();
 }
 
 function editStudent(id) {
@@ -224,7 +227,7 @@ function renderSearchResult(filteredStudents) {
     if (filteredStudents.length === 0) {
         resultDiv.style.display = "block";
         table.innerHTML = "<tr><td colspan='7'>Không tìm thấy sinh viên nào</td></tr>";
-    return;
+        return;
     }
 
     resultDiv.style.display = "block";
@@ -253,3 +256,33 @@ function renderSearchResult(filteredStudents) {
 
     table.innerHTML = html;
 }
+
+function logout() {
+    // Xác nhận đăng xuất
+    if (confirm("Bạn có chắc chắn muốn đăng xuất?")) {
+        // Xóa dữ liệu đăng nhập (tuỳ bạn lưu bằng localStorage hay sessionStorage)
+        localStorage.removeItem("userEmail");  // hoặc sessionStorage nếu bạn dùng nó
+        // Chuyển hướng về trang đăng nhập
+        window.location.href = "../login/login.html";
+    }
+}
+
+function updateStatistics() {
+    const students = getListStudent(); // Hàm này bạn đã dùng trong renderListStudent()
+    const total = students.length;
+    const males = students.filter(s => s.gender === "1").length;
+    const females = students.filter(s => s.gender === "2").length;
+
+    // Cập nhật lên giao diện
+    document.getElementById("total-students").textContent = total;
+    document.getElementById("male-count").textContent = males;
+    document.getElementById("female-count").textContent = females;
+}
+
+function getListStudent() {
+    return localStorage.getItem('students') ? JSON.parse(localStorage.getItem('students')) : [];
+}
+
+window.onload = function () {
+    renderListStudent(); // hiển thị danh sách
+};
