@@ -103,56 +103,51 @@ function clearForm() {
     document.getElementById('save-btn').innerText = 'Thêm mới';
 }
 
-async function renderListStudent() {
-    try {
-        const response = await fetch('http://localhost:3000/students');
-        if (!response.ok) throw new Error('Failed to fetch');
+function renderListStudent() {
+    let students = localStorage.getItem('students') ? JSON.parse(localStorage.getItem('students')) : [];
 
-        const students = await response.json();
-        const listContainer = document.getElementById('list-student');
+    let listContainer = document.getElementById('list-student');
 
-        if (students.length === 0) {
-            listContainer.style.display = 'none';
-            document.getElementById('grid-students').innerHTML = '';
-            return;
-        }
+    if (students.length === 0) {
+        listContainer.style.display = 'none';
+        document.getElementById('grid-students').innerHTML = ''; // clear bảng
+        return;
+    }
 
-        listContainer.style.display = 'block';
+    listContainer.style.display = 'block';
 
-        let tableContent = `<tr>
-      <td>NO</td>
-      <td>Họ và tên</td>
-      <td>Mã sinh viên</td>
-      <td>Email</td>
-      <td>Điện thoại</td>
-      <td>Giới tính</td>
-      <td>Địa chỉ</td>
-      <td>Hành động</td>
+    let tableContent = `<tr>
+        <td width='20'>NO</td>
+        <td>Họ và tên</td>
+        <td>Mã sinh viên</td>
+        <td>Email</td>
+        <td>Điện thoại</td>
+        <td>Giới tính</td>
+        <td>Địa chỉ</td>
+        <td>Hành động</td>
     </tr>`;
 
-        students.forEach((student, index) => {
-            const genderLabel = student.gender === 'Nam' ? 'Nam' : 'Nữ';
-            tableContent += `<tr>
-        <td>${index + 1}</td>
-        <td>${student.full_name}</td>
-        <td>${student.student_id}</td>
-        <td>${student.email}</td>
-        <td>${student.phone}</td>
-        <td>${genderLabel}</td>
-        <td>${student.address || ''}</td>
-        <td>
-          <a href="#" onclick='editStudent("${student.student_id}")'>Sửa</a> | 
-          <a href="#" onclick='deleteStudent("${student.student_id}")'>Xóa</a>
-        </td>
-      </tr>`;
-        });
+    students.forEach((student, index) => {
+        let studentId = index;
+        let genderLabel = parseInt(student.gender) === 1 ? 'Nam' : 'Nữ';
 
-        document.getElementById('grid-students').innerHTML = tableContent;
+        tableContent += `<tr>
+            <td>${index + 1}</td>
+            <td>${student.fullname}</td>
+            <td>${student.code}</td>
+            <td>${student.email}</td>
+            <td>${student.phone}</td>
+            <td>${genderLabel}</td>
+            <td>${student.address}</td>
+            <td>
+                <a href="#" onclick='editStudent(${studentId})'>Sửa</a> | 
+                <a href="#" onclick='deleteStudent(${studentId})'>Xóa</a> | 
+                <a href="#" onclick='copyStudent(${studentId})'>Copy</a>
+            </td>
+        </tr>`;
+    });
 
-    } catch (err) {
-        console.error('Lỗi khi tải danh sách sinh viên:', err);
-        alert('Không thể kết nối đến máy chủ.');
-    }
+    document.getElementById('grid-students').innerHTML = tableContent;
 }
 
 function deleteStudent(id){
@@ -203,7 +198,7 @@ function copyStudent(id) {
 }
 
 function searchStudents() {
-    const keyword = document.getElementById("search-keyword").value.toLowerCase();
+    const keyword = document.getElementById("search-input").value.toLowerCase();
     const genderFilter = document.getElementById("gender-filter").value;
     const students = JSON.parse(localStorage.getItem("students")) || [];
 
@@ -227,9 +222,9 @@ function renderSearchResult(filteredStudents) {
     const resultDiv = document.getElementById("search-result");
 
     if (filteredStudents.length === 0) {
-        resultDiv.style.display = "none";
-        table.innerHTML = "";
-        return;
+        resultDiv.style.display = "block";
+        table.innerHTML = "<tr><td colspan='7'>Không tìm thấy sinh viên nào</td></tr>";
+    return;
     }
 
     resultDiv.style.display = "block";
