@@ -7,6 +7,7 @@ function save() {
     let code = document.getElementById('code').value;
     let email = document.getElementById('email').value;
     let phone = document.getElementById('phone').value;
+    let score = document.getElementById('score').value;
     let address = document.getElementById('address').value;
     let gender = '';
 
@@ -59,13 +60,20 @@ function save() {
         document.getElementById('gender-error').innerHTML = '';
     }
 
-    if (fullname && code && email && phone && address && gender) {
+    if (_.isEmpty(score) || isNaN(score) || score < 0 || score > 10) {
+        document.getElementById('score-error').innerHTML = 'Điểm phải là số từ 0 đến 10';
+        score = '';
+    } else {
+        document.getElementById('score-error').innerHTML = '';
+    }
+
+    if (fullname && code && email && phone && score && address && gender) {
         let students = localStorage.getItem('students') ? JSON.parse(localStorage.getItem('students')) : [];
         let editId = document.getElementById('edit-id').value;
 
         if (editId !== '') {
             // Update sinh viên
-            students[editId] = { fullname, code, email, phone, address, gender };
+            students[editId] = { fullname, code, email, phone, address, gender, score };
             document.getElementById('save-btn').innerText = 'Thêm mới';
             document.getElementById('edit-id').value = '';
         } else {
@@ -82,7 +90,7 @@ function save() {
                 return;
             }
 
-            students.push({ fullname, code, email, phone, address, gender });
+            students.push({ fullname, code, email, phone, address, gender, score });
         }
 
         localStorage.setItem('students', JSON.stringify(students));
@@ -96,6 +104,7 @@ function clearForm() {
     document.getElementById('code').value = '';
     document.getElementById('email').value = '';
     document.getElementById('phone').value = '';
+    document.getElementById('score').value = '';
     document.getElementById('address').value = '';
     document.getElementById('male').checked = false;
     document.getElementById('famale').checked = false;
@@ -122,6 +131,7 @@ function renderListStudent() {
         <td>Mã sinh viên</td>
         <td>Email</td>
         <td>Điện thoại</td>
+        <td>Điểm</td>
         <td>Giới tính</td>
         <td>Địa chỉ</td>
         <td>Hành động</td>
@@ -137,6 +147,7 @@ function renderListStudent() {
             <td>${student.code}</td>
             <td>${student.email}</td>
             <td>${student.phone}</td>
+            <td>${student.score || "0"}</td>
             <td>${genderLabel}</td>
             <td>${student.address}</td>
             <td>
@@ -168,6 +179,7 @@ function editStudent(id) {
     document.getElementById('code').value = student.code;
     document.getElementById('email').value = student.email;
     document.getElementById('phone').value = student.phone;
+    document.getElementById('score').value = student.score;
     document.getElementById('address').value = student.address;
 
     if (parseInt(student.gender) === 1) {
@@ -188,6 +200,7 @@ function copyStudent(id) {
     document.getElementById('code').value = student.code; // <-- hiển thị mã sinh viên
     document.getElementById('email').value = student.email;
     document.getElementById('phone').value = student.phone;
+    document.getElementById('score').value = student.score;
     document.getElementById('address').value = student.address;
 
     if (parseInt(student.gender) === 1) {
@@ -238,6 +251,7 @@ function renderSearchResult(filteredStudents) {
         <td>Mã sinh viên</td>
         <td>Email</td>
         <td>SĐT</td>
+        <td>Điểm</td>
         <td>Giới tính</td>
         <td>Địa chỉ</td>
     </tr>`;
@@ -249,6 +263,7 @@ function renderSearchResult(filteredStudents) {
             <td>${student.code}</td>
             <td>${student.email}</td>
             <td>${student.phone}</td>
+            <td>${student.score}</td>
             <td>${student.gender == '1' ? 'Nam' : 'Nữ'}</td>
             <td>${student.address}</td>
         </tr>`;
