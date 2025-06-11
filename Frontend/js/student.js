@@ -1,3 +1,12 @@
+// Kiểm tra đăng nhập, nếu chưa login thì chuyển về login.html
+window.onload = function () {
+    if (!localStorage.getItem("user")) {
+        window.location.href = "../html/login.html";
+        return;
+    }
+    renderListStudent(); // hiển thị danh sách
+};
+
 function emailIsValid(email) {
     return /^\d{8}@st\.phenikaa-uni\.edu\.vn$/.test(email);
 }
@@ -275,10 +284,10 @@ function renderSearchResult(filteredStudents) {
 function logout() {
     // Xác nhận đăng xuất
     if (confirm("Bạn có chắc chắn muốn đăng xuất?")) {
-        // Xóa dữ liệu đăng nhập (tuỳ bạn lưu bằng localStorage hay sessionStorage)
-        localStorage.removeItem("userEmail");  // hoặc sessionStorage nếu bạn dùng nó
-        // Chuyển hướng về trang đăng nhập
-        window.location.href = "../login/login.html";
+        // Xóa dữ liệu đăng nhập nếu có
+        localStorage.removeItem("user");
+        // Chuyển hướng về trang login
+        window.location.href = "../html/login.html";
     }
 }
 
@@ -298,6 +307,7 @@ function getListStudent() {
     return localStorage.getItem('students') ? JSON.parse(localStorage.getItem('students')) : [];
 }
 
-window.onload = function () {
-    renderListStudent(); // hiển thị danh sách
-};
+function togglePopup(id) {
+    const element = document.getElementById(id);
+    element.classList.toggle("popup-visible");
+}
