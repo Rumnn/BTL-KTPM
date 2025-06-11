@@ -10,114 +10,142 @@
 </head>
 
 <body onload="renderListStudent()">
-  <div class="dashboard-container">
-    <!-- === SIDEBAR === -->
-    <aside class="sidebar">
-      <h2>Menu</h2>
-      <ul>
-        <li><a href="#"><i class="fas fa-users"></i> Quản lý sinh viên</a></li>
-        <li><a href="#"><i class="fas fa-chart-bar"></i> Thống kê</a></li>
-        <li><a href="#"><i class="fas fa-exchange-alt"></i> Đổi lớp</a></li>
-        <li><a href="#"><i class="fas fa-database"></i> Quản lý CSDL</a></li>
-        <li><a href="#"><i class="fas fa-envelope"></i> Liên hệ</a></li>
-        <li><a href="javascript:void(0);" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a></li>
-      </ul>
-    </aside>
+<div class="dashboard-container">
+  <!-- === SIDEBAR === -->
+  <aside class="sidebar">
+    <h2>Menu</h2>
+    <ul>
+      <li><a href="#"><i class="fas fa-users"></i> Quản lý sinh viên</a></li>
+      <li><a href="#"><i class="fas fa-chart-bar"></i> Thống kê</a></li>
+      <li><a href="#"><i class="fas fa-exchange-alt"></i> Đổi lớp</a></li>
+      <li><a href="#"><i class="fas fa-database"></i> Quản lý CSDL</a></li>
+      <li><a href="#"><i class="fas fa-envelope"></i> Liên hệ</a></li>
+      <li><a href="javascript:void(0);" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a></li>
+    </ul>
+  </aside>
 
-    <!-- === NỘI DUNG CHÍNH === -->
-    <main class="main-content">
-      <!-- Header -->
-      <header class="header">
-        <div class="user-info">
-          <i class="fas fa-user-circle"></i> Nguyễn Văn A
-        </div>
-      </header>
+  <!-- === NỘI DUNG CHÍNH === -->
+  <main class="main-content">
+    <!-- Header -->
+    <header class="header">
+      <div class="user-info">
+        <i class="fas fa-user-circle"></i> Nguyễn Văn A
+      </div>
+    </header>
 
-      <!-- Thống kê -->
-      <section class="stats">
-        <div class="stat-box">Tổng sinh viên: <strong id="total-students">0</strong></div>
-        <div class="stat-box">Lớp đang quản lý: <strong>KTPM</strong></div>
-        <div class="stat-box">
-          Nam: <strong id="male-count">0</strong> |
-          Nữ: <strong id="female-count">0</strong>
-        </div>
-      </section>
+    <!-- Thống kê -->
+    <section class="stats">
+      <div class="stat-box">Tổng sinh viên: <strong id="total-students">0</strong></div>
+      <div class="stat-box">Lớp đang quản lý: <strong>KTPM</strong></div>
+      <div class="stat-box">
+        Nam: <strong id="male-count">0</strong> |
+        Nữ: <strong id="female-count">0</strong>
+      </div>
+    </section>
 
-      <!-- Nội dung quản lý sinh viên -->
-      <div class="main-container">
-        <!-- FORM VÀ TÌM KIẾM -->
-        <div class="left-panel">
-          <!-- Form -->
-          <div class="form-student">
-            <h3>Thông tin sinh viên</h3>
-            <form id="student-form">
-              <label>Họ tên:</label><br>
-              <input type="text" id="fullname">
-              <span id="fullname-error" class="error"></span><br>
+    <!-- Nút mở popup -->
+    <div class="popup-btns">
+      <button id="search-btn" type="button" onclick="openPopup('search-popup')"><i class="fas fa-search"></i> Tìm kiếm sinh viên</button>
+      <button id="add-btn" type="button" onclick="openPopup('add-popup')"><i class="fas fa-user-plus"></i> Thêm sinh viên</button>
+    </div>
 
-              <label>Mã sinh viên:</label><br>
-              <input type="text" id="code">
-              <span id="code-error" class="error"></span><br>
+    <!-- Popup tìm kiếm sinh viên -->
+    <div id="search-popup" class="popup">
+      <div class="popup-content">
+        <span class="close" onclick="closePopup('search-popup')">&times;</span>
+        <div class="search-panel">
+          <h3>Tìm kiếm sinh viên</h3>
+          <input type="text" id="search-input" placeholder="Tìm theo Họ tên, Email, SĐT"><br>
+          <select id="gender-filter">
+            <option value="">Lọc theo Giới tính</option>
+            <option value="1">Nam</option>
+            <option value="2">Nữ</option>
+          </select>
+          <button onclick="searchStudents()">Tìm kiếm</button>
 
-              <label>Email:</label><br>
-              <input type="email" id="email">
-              <span id="email-error" class="error"></span><br>
-
-              <label>Số điện thoại:</label><br>
-              <input type="text" id="phone">
-              <span id="phone-error" class="error"></span><br>
-
-              <label for="score">Điểm trung bình</label>
-              <input type="number" id="score" min="0" max="10" step="0.1" placeholder="Nhập điểm từ 0 đến 10">
-              <span class="error" id="score-error"></span>
-
-              <label>Địa chỉ:</label><br>
-              <input type="text" id="address">
-              <span id="address-error" class="error"></span><br>
-
-              <label>Giới tính</label>
-              <input type="radio" name="gender" id="male" value="1"> Nam
-              <input type="radio" name="gender" id="famale" value="2"> Nữ
-              <span id="gender-error" class="error"></span><br>
-
-              <button id="save-btn" type="button" onclick="save()">Lưu</button>
-              <input type="hidden" id="edit-id" value="">
-            </form>
-          </div>
-
-          <!-- Tìm kiếm -->
-          <div class="search-panel">
-            <h3>Tìm kiếm sinh viên</h3>
-            <input type="text" id="search-input" placeholder="Tìm theo Họ tên, Email, SĐT"><br>
-            <select id="gender-filter">
-              <option value="">Lọc theo Giới tính</option>
-              <option value="1">Nam</option>
-              <option value="2">Nữ</option>
-            </select>
-            <button onclick="searchStudents()">Tìm kiếm</button>
-
-            <!-- Kết quả tìm kiếm -->
-            <div class="search-result" id="search-result" style="display: none;">
-              <h4>Kết quả tìm kiếm</h4>
-              <table id="search-student-table" border="1" cellpadding="4"></table>
-            </div>
-          </div>
-        </div>
-
-        <!-- DANH SÁCH SINH VIÊN -->
-        <div class="right-panel">
-          <div class="list-student" id="list-student">
-            <h3>Danh sách sinh viên</h3>
-            <table id="grid-students" width="100%" border="1" cellpadding="4"></table>
+          <!-- Kết quả tìm kiếm -->
+          <div class="search-result" id="search-result" style="display: none;">
+            <h4>Kết quả tìm kiếm</h4>
+            <table id="search-student-table" border="1" cellpadding="4"></table>
           </div>
         </div>
       </div>
-    </main>
-  </div>
+    </div>
 
-  <!-- SCRIPT -->
-  <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
-  <script src="../js/student.js"></script>
+    <!-- Popup thêm sinh viên -->
+    <div id="add-popup" class="popup">
+      <div class="popup-content">
+        <span class="close" onclick="closePopup('add-popup')">&times;</span>
+        <div class="form-student">
+          <h3>Thông tin sinh viên</h3>
+          <form id="student-form">
+            <label>Họ tên:</label><br>
+            <input type="text" id="fullname">
+            <span id="fullname-error" class="error"></span><br>
+
+            <label>Mã sinh viên:</label><br>
+            <input type="text" id="code">
+            <span id="code-error" class="error"></span><br>
+
+            <label>Email:</label><br>
+            <input type="email" id="email">
+            <span id="email-error" class="error"></span><br>
+
+            <label>Số điện thoại:</label><br>
+            <input type="text" id="phone">
+            <span id="phone-error" class="error"></span><br>
+
+            <label for="score">Điểm trung bình</label>
+            <input type="number" id="score" min="0" max="10" step="0.1" placeholder="Nhập điểm từ 0 đến 10">
+            <span class="error" id="score-error"></span>
+
+            <label>Địa chỉ:</label><br>
+            <input type="text" id="address">
+            <span id="address-error" class="error"></span><br>
+
+            <label>Giới tính</label>
+            <input type="radio" name="gender" id="male" value="1"> Nam
+            <input type="radio" name="gender" id="famale" value="2"> Nữ
+            <span id="gender-error" class="error"></span><br>
+
+            <button id="save-btn" type="button" onclick="save()">Lưu</button>
+            <input type="hidden" id="edit-id" value="">
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- DANH SÁCH SINH VIÊN -->
+    <div class="right-panel">
+      <div class="list-student" id="list-student">
+        <h3>Danh sách sinh viên</h3>
+        <table id="grid-students" width="100%" border="1" cellpadding="4"></table>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- SCRIPT -->
+<script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+<script src="../js/student.js"></script>
+<script>
+  // Popup logic
+  function openPopup(id) {
+    document.getElementById(id).style.display = 'flex';
+  }
+  function closePopup(id) {
+    document.getElementById(id).style.display = 'none';
+  }
+  // Đóng popup khi click ngoài
+  window.onclick = function (event) {
+    ['search-popup', 'add-popup'].forEach(function (id) {
+      const popup = document.getElementById(id);
+      if (popup && event.target === popup) {
+        popup.style.display = 'none';
+      }
+    });
+  }
+</script>
 </body>
 
 </html>
