@@ -119,6 +119,7 @@ function clearForm() {
     document.getElementById('famale').checked = false;
     document.getElementById('edit-id').value = '';
     document.getElementById('save-btn').innerText = 'Thêm mới';
+    document.getElementById('save-btn').innerText = 'Lưu';
 }
 
 function renderListStudent() {
@@ -199,6 +200,8 @@ function editStudent(id) {
 
     document.getElementById('edit-id').value = id;
     document.getElementById('save-btn').innerText = 'Cập nhật';
+
+    document.getElementById('add-popup').style.display = 'flex';
 }
 
 function copyStudent(id) {
@@ -310,4 +313,12 @@ function getListStudent() {
 function togglePopup(id) {
     const element = document.getElementById(id);
     element.classList.toggle("popup-visible");
+}
+
+function showFormPanel() {
+    document.getElementById("form-student-panel").style.display = "block";
+}
+
+function closeFormPanel() {
+    document.getElementById("form-student-panel").style.display = "none";
 }
