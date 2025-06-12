@@ -163,7 +163,6 @@ function renderListStudent() {
             <td>
                 <a href="#" onclick='editStudent(${studentId})'>Sửa</a> | 
                 <a href="#" onclick='deleteStudent(${studentId})'>Xóa</a> | 
-                <a href="#" onclick='copyStudent(${studentId})'>Copy</a>
             </td>
         </tr>`;
     });
@@ -202,27 +201,6 @@ function editStudent(id) {
     document.getElementById('save-btn').innerText = 'Cập nhật';
 
     document.getElementById('add-popup').style.display = 'flex';
-}
-
-function copyStudent(id) {
-    let students = localStorage.getItem('students') ? JSON.parse(localStorage.getItem('students')) : [];
-    let student = students[id];
-
-    document.getElementById('fullname').value = student.fullname;
-    document.getElementById('code').value = student.code; // <-- hiển thị mã sinh viên
-    document.getElementById('email').value = student.email;
-    document.getElementById('phone').value = student.phone;
-    document.getElementById('score').value = student.score;
-    document.getElementById('address').value = student.address;
-
-    if (parseInt(student.gender) === 1) {
-        document.getElementById('male').checked = true;
-    } else {
-        document.getElementById('famale').checked = true;
-    }
-
-    document.getElementById('edit-id').value = ''; // để đảm bảo đây là thêm mới
-    document.getElementById('save-btn').innerText = 'Thêm mới';
 }
 
 function searchStudents() {
