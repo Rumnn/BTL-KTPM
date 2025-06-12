@@ -4,6 +4,7 @@ body {
     margin: 0;
     font-family: Arial, sans-serif;
     background-color: #f0f2f5;
+    overflow-x: hidden; /* NGĂN TRÀN NGANG */
 }
 
 /* ==== BỐ CỤC 2 CỘT ==== */
@@ -347,3 +348,25 @@ a:hover {
 .logout-btn:hover {
     background-color: #c82333;
 }
+
+.popup {
+    display: none;
+    position: fixed;
+    z-index: 999;
+    right: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    background: rgba(0,0,0,0.15);
+    justify-content: flex-end;
+    align-items: flex-start;
+  }
+  .popup-content {
+    background: #fff;
+    margin: 40px 0 0 auto;
+    padding: 30px;
+    border-radius: 10px 0 0 10px;
+    width: 400px;
+    box-shadow: -2px 0 8px rgba(0,0,0,0.2);
+  }
+  
