@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Thống kê sinh viên</title>
+  <link rel="stylesheet" href="../css/thongke.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body onload="renderStatistics()">
+  <div class="dashboard-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <h2>Menu</h2>
+      <ul>
+        <li><a href="index.html"><i class="fas fa-users"></i> Quản lý sinh viên</a></li>
+        <li><a href="thongke.html"><i class="fas fa-chart-bar"></i> Thống kê</a></li>
+        <li><a href="#"><i class="fas fa-exchange-alt"></i> Đổi lớp</a></li>
+        <li><a href="#"><i class="fas fa-database"></i> Quản lý CSDL</a></li>
+        <li><a href="#"><i class="fas fa-envelope"></i> Liên hệ</a></li>
+        <li><a href="javascript:void(0);" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a></li>
+      </ul>
+    </aside>
+
+    <!-- Main content -->
+    <main class="main-content">
+      <header class="header">
+        <div class="user-info">
+          <i class="fas fa-user-circle"></i> Nguyễn Văn A
+        </div>
+      </header>
+
+      <section class="stats">
+        <div class="stat-box">Tổng sinh viên: <strong id="total-students">0</strong></div>
+        <div class="stat-box">Giỏi: <strong id="gioi">0</strong></div>
+        <div class="stat-box">Khá: <strong id="kha">0</strong></div>
+        <div class="stat-box">Trung bình: <strong id="trungbinh">0</strong></div>
+        <div class="stat-box">Yếu: <strong id="yeu">0</strong></div>
+      </section>
+
+      <div class="chart-percent-wrapper">
+        <canvas id="scoreChart" width="300" height="300"></canvas>
+        <div class="percent-info">
+          <h4>Tỉ lệ xếp loại</h4>
+          <p>Giỏi: <span id="excellent-percent">0%</span></p>
+          <p>Khá: <span id="good-percent">0%</span></p>
+          <p>Trung bình: <span id="average-percent">0%</span></p>
+          <p>Yếu: <span id="poor-percent">0%</span></p>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="../js/thongke.js"></script>
+</body>
+</html>
