@@ -1,99 +1,148 @@
+/* thongke.css - sidebar giống mẫu ảnh */
+
 body {
-  margin: 0;
   font-family: Arial, sans-serif;
-  background-color: #f0f2f5;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f4;
+  color: #333;
 }
 
-.dashboard-container {
+.container {
   display: flex;
-  height: 100vh;
+  min-height: 100vh;
 }
 
 .sidebar {
-  width: 220px;
-  background-color: #343a40;
-  color: white;
+  background: #2c3e50;
+  color: #fff;
   padding: 20px;
+  width: 220px;
+  min-height: 100vh;
 }
 
-.sidebar h2 {
+.sidebar-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   font-size: 20px;
-  margin-bottom: 20px;
+  font-weight: bold;
+  margin-bottom: 30px;
 }
 
 .sidebar ul {
   list-style: none;
   padding: 0;
+  margin: 0;
 }
 
-.sidebar li {
-  margin: 10px 0;
+.sidebar ul li {
+  margin-bottom: 16px;
 }
 
-.sidebar a {
+.sidebar ul li a {
   color: white;
   text-decoration: none;
-  font-size: 16px;
   display: flex;
   align-items: center;
+  gap: 10px;
+  font-size: 16px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  transition: background 0.2s;
 }
 
-.sidebar a i {
-  margin-right: 10px;
-}
-
-.sidebar a:hover {
-  color: #17a2b8;
+.sidebar ul li a:hover {
+  background-color: #34495e;
 }
 
 .main-content {
-  flex-grow: 1;
+  flex: 1;
   padding: 20px;
-  overflow-y: auto;
-  background-color: #fff;
 }
 
-.header {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  margin-bottom: 20px;
+.user-info {
+  text-align: right;
   font-size: 16px;
+  margin-bottom: 20px;
 }
 
-.stats {
+.class-filter {
+  margin-bottom: 20px;
+}
+
+.class-filter label {
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.class-filter select {
+  padding: 5px 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.stats-row {
   display: flex;
-  gap: 20px;
+  flex-wrap: wrap;
+  gap: 10px;
   margin-bottom: 30px;
 }
 
 .stat-box {
-  flex: 1;
-  background-color: #e9ecef;
+  background-color: #ecf0f1;
   padding: 15px;
   border-radius: 8px;
   text-align: center;
-  font-size: 18px;
+  font-size: 16px;
+  flex: 1;
+  min-width: 160px;
 }
 
-.chart-percent-wrapper {
+.stat-box strong {
+  display: block;
+  font-size: 20px;
+  margin-top: 5px;
+}
+
+.chart-section {
   display: flex;
-  gap: 30px;
   justify-content: center;
   align-items: center;
-  margin-top: 30px;
+  gap: 40px;
+  flex-wrap: wrap;
 }
 
-canvas#scoreChart {
-  max-width: 500px;
-  max-height: 500px;
+.chart-container {
+  padding: 0;
+  border-radius: 0;
+  box-shadow: none;
 }
 
-.percent-info {
-  background: #f7f7f7;
+#chart {
+  width: 380px !important;
+  height: 380px !important;
+}
+
+.chart-summary {
+  background: #f9f9f9;
   padding: 20px;
   border-radius: 10px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  min-width: 180px;
+}
+
+.chart-summary h3 {
+  margin-top: 0;
+}
+
+.chart-summary ul {
+  list-style: none;
+  padding-left: 0;
   font-size: 16px;
 }
 
+.chart-summary li {
+  margin: 6px 0;
+}
