@@ -273,7 +273,7 @@ a:hover {
 
 .sidebar {
     width: 220px;
-    background-color: #343a40;
+    background-color: #243447;
     color: white;
     padding: 20px;
 }
@@ -374,4 +374,37 @@ a:hover {
     box-shadow: -2px 0 8px rgba(0,0,0,0.2);
     max-width: 600px; /* hoặc lớn hơn nếu cần */
 }
-  
+
+/* === Căn giữa header và tên người dùng giống trang chủ === */
+.header .user-info {
+    color: #333;
+    font-weight: bold;
+}
+
+.stat-box strong {
+    display: block;
+    margin-top: 5px;
+    font-size: 20px;
+}
+
+#class-selector {
+  margin-top: 8px;
+  width: 100%;
+  padding: 5px;
+  font-size: 14px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.stat-gender {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  font-size: 16px;
+}
+
+.stat-gender span {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
