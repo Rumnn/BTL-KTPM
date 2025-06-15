@@ -4,53 +4,60 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Thống kê sinh viên</title>
-  <link rel="stylesheet" href="../css/thongke.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="../css/thongke.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/js/all.min.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-<body onload="renderStatistics()">
-  <div class="dashboard-container">
-    <!-- Sidebar -->
+<body>
+  <div class="container">
     <aside class="sidebar">
-      <h2>Menu</h2>
+      <div class="sidebar-title">
+        <i class="fas fa-graduation-cap"></i>
+        <span>Quản lý sinh viên</span>
+      </div>
       <ul>
-        <li><a href="index.html"><i class="fas fa-users"></i> Quản lý sinh viên</a></li>
-        <li><a href="thongke.html"><i class="fas fa-chart-bar"></i> Thống kê</a></li>
-        <li><a href="#"><i class="fas fa-exchange-alt"></i> Đổi lớp</a></li>
-        <li><a href="#"><i class="fas fa-database"></i> Quản lý CSDL</a></li>
-        <li><a href="#"><i class="fas fa-envelope"></i> Liên hệ</a></li>
-        <li><a href="javascript:void(0);" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a></li>
+        <li><a href="giaodien.html"><i class="fas fa-house"></i><span>Trang chủ</span></a></li>
+        <li><a href="index.html"><i class="fas fa-users"></i><span>Quản lý sinh viên</span></a></li>
+        <li><a href="thongke.html"><i class="fas fa-chart-pie"></i><span>Thống kê</span></a></li>
+        <li><a href="javascript:void(0);" onclick="logout()"><i class="fas fa-right-from-bracket"></i><span>Đăng xuất</span></a></li>
       </ul>
     </aside>
 
-    <!-- Main content -->
     <main class="main-content">
-      <header class="header">
-        <div class="user-info">
-          <i class="fas fa-user-circle"></i> Nguyễn Văn A
-        </div>
-      </header>
+      <div class="header">
+        <div class="user-info">👤 Nguyễn Văn A</div>
+      </div>
 
-      <section class="stats">
+      <div class="class-filter">
+        <label for="class-selector">Chọn lớp:</label>
+        <select id="class-selector"></select>
+      </div>
+
+      <section class="stats-row">
         <div class="stat-box">Tổng sinh viên: <strong id="total-students">0</strong></div>
-        <div class="stat-box">Giỏi: <strong id="gioi">0</strong></div>
-        <div class="stat-box">Khá: <strong id="kha">0</strong></div>
-        <div class="stat-box">Trung bình: <strong id="trungbinh">0</strong></div>
-        <div class="stat-box">Yếu: <strong id="yeu">0</strong></div>
+        <div class="stat-box">Giỏi: <strong id="gioi-count">0</strong></div>
+        <div class="stat-box">Khá: <strong id="kha-count">0</strong></div>
+        <div class="stat-box">Trung bình: <strong id="tb-count">0</strong></div>
+        <div class="stat-box">Yếu: <strong id="yeu-count">0</strong></div>
       </section>
 
-      <div class="chart-percent-wrapper">
-        <canvas id="scoreChart" width="400" height="400"></canvas>
-        <div class="percent-info">
-          <h4>Tỉ lệ xếp loại</h4>
-          <p>Giỏi: <span id="excellent-percent">0%</span></p>
-          <p>Khá: <span id="good-percent">0%</span></p>
-          <p>Trung bình: <span id="average-percent">0%</span></p>
-          <p>Yếu: <span id="poor-percent">0%</span></p>
+      <section class="chart-section">
+        <div class="chart-container">
+          <canvas id="chart" width="380" height="380"></canvas>
         </div>
-      </div>
+        <div class="chart-summary">
+          <h3>Tỉ lệ xếp loại</h3>
+          <ul id="chart-legend">
+            <li>Giỏi: <span id="gioi-pct">0%</span></li>
+            <li>Khá: <span id="kha-pct">0%</span></li>
+            <li>Trung bình: <span id="tb-pct">0%</span></li>
+            <li>Yếu: <span id="yeu-pct">0%</span></li>
+          </ul>
+        </div>
+      </section>
     </main>
   </div>
+
   <script src="../js/thongke.js"></script>
 </body>
 </html>
