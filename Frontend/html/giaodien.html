@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trang chủ - Quản lý lớp học</title>
+  <link rel="stylesheet" href="../css/giaodien.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+<body onload="renderClassList()">
+  <div class="dashboard-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <h2><i class="fas fa-graduation-cap"></i> Quản lý sinh viên</h2>
+      <ul>
+        <li><a href="giaodien.html"><i class="fas fa-home"></i> Trang chủ</a></li>
+        <li><a href="index.html"><i class="fas fa-users"></i> Quản lý sinh viên</a></li>
+        <li><a href="thongke.html"><i class="fas fa-chart-pie"></i> Thống kê</a></li>
+        <li><a href="javascript:void(0);" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a></li>
+      </ul>
+    </aside>
+
+    <!-- Main content -->
+    <main class="main-content">
+      <header class="header">
+        <div class="user-info"><i class="fas fa-user-circle"></i> Nguyễn Văn A</div>
+      </header>
+
+      <section class="stats">
+        <div class="stat-box">Tổng số lớp<br><strong id="total-class">0</strong></div>
+        <div class="stat-box">Tổng sinh viên<br><strong id="total-student">0</strong></div>
+        <div class="stat-box">Lớp đang mở<br><strong id="open-class">0</strong></div>
+        <div class="stat-box">Học phần<br><strong id="total-subject">0</strong></div>
+      </section>
+
+      <section class="class-list-section">
+        <div class="class-list-header">
+          <h3><i class="fas fa-list"></i> Danh sách lớp học phần</h3>
+          <div class="actions">
+            <select id="filter-semester" onchange="renderClassList()">
+              <option value="">Tất cả kỳ học</option>
+              <option value="kỳ 1">Kỳ 1</option>
+              <option value="kỳ 2">Kỳ 2</option>
+              <option value="kỳ 3">Kỳ 3</option>
+            </select>
+            <input type="text" id="search-input" placeholder="Tìm kiếm lớp học..." oninput="renderClassList()" />
+            <button class="btn-add" onclick="openPopup()"><i class="fas fa-plus"></i> Thêm lớp mới</button>
+          </div>
+        </div>
+
+        <table id="class-table">
+          <thead>
+            <tr>
+              <th>Mã lớp</th>
+              <th>Tên lớp</th>
+              <th>Học phần</th>
+              <th>Kỳ học</th>
+              <th>Số SV</th>
+              <th>Trạng thái</th>
+              <th>Hành động</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </section>
+    </main>
+  </div>
+
+  <!-- Popup Thêm/Sửa lớp -->
+  <div class="popup" id="class-popup">
+    <div class="popup-content">
+      <span class="close" onclick="closePopup()">&times;</span>
+      <h3 id="popup-title">Thêm lớp học mới</h3>
+      <form id="class-form">
+        <input type="hidden" id="edit-index" />
+        <label>Mã lớp:</label>
+        <input type="text" id="maLop" required />
+        <label>Tên lớp:</label>
+        <input type="text" id="tenLop" required />
+        <label>Học phần:</label>
+        <input type="text" id="hocPhan" required />
+        <label>Kỳ học:</label>
+        <select id="kyHoc" required>
+          <option value="">-- Chọn kỳ học --</option>
+          <option value="Kỳ 1">Kỳ 1</option>
+          <option value="Kỳ 2">Kỳ 2</option>
+          <option value="Kỳ 3">Kỳ 3</option>
+        </select>
+        <label>Số sinh viên:</label>
+        <input type="number" id="soSV" required />
+        <label>Trạng thái:</label>
+        <select id="trangThai">
+          <option value="ĐANG MỞ">ĐANG MỞ</option>
+          <option value="TẠM DỪNG">TẠM DỪNG</option>
+        </select>
+        <button type="submit">Lưu lớp</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="../js/giaodien.js"></script>
+</body>
+</html>
