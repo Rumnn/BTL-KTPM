@@ -79,13 +79,14 @@ body {
 .chart-percent-wrapper {
   display: flex;
   gap: 30px;
+  justify-content: center;
   align-items: center;
-  margin-top: 20px;
+  margin-top: 30px;
 }
 
 canvas#scoreChart {
-  max-width: 300px;
-  max-height: 300px;
+  max-width: 500px;
+  max-height: 500px;
 }
 
 .percent-info {

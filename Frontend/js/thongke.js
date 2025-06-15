@@ -47,7 +47,13 @@ function renderStatistics() {
       responsive: true,
       plugins: {
         legend: {
-          position: 'top'
+          position: 'top',
+          labels: {
+            font: {
+              size: 23
+            },
+            color: '#000'
+          }
         }
       }
     }
