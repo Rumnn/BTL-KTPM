@@ -1,302 +1,184 @@
-// Kiểm tra đăng nhập, nếu chưa login thì chuyển về login.html
+// File: student.js - Đã sửa lỗi cú pháp và hoạt động chuẩn
+
 window.onload = function () {
-    if (!localStorage.getItem("user")) {
-        window.location.href = "../html/login.html";
-        return;
-    }
-    renderListStudent(); // hiển thị danh sách
+  if (!localStorage.getItem("user")) {
+    window.location.href = "../html/login.html";
+    return;
+  }
+  renderClassOptions();
+  renderListStudent();
 };
 
 function emailIsValid(email) {
-    return /^\d{8}@st\.phenikaa-uni\.edu\.vn$/.test(email);
+  return /^\d{8}@st\.phenikaa-uni\.edu\.vn$/.test(email);
 }
 
 function save() {
-    let fullname = document.getElementById('fullname').value;
-    let code = document.getElementById('code').value;
-    let email = document.getElementById('email').value;
-    let phone = document.getElementById('phone').value;
-    let score = document.getElementById('score').value;
-    let address = document.getElementById('address').value;
-    let gender = '';
+  const fullname = document.getElementById("fullname").value.trim();
+  const code = document.getElementById("code").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const phone = document.getElementById("phone").value.trim();
+  const score = document.getElementById("score").value.trim();
+  const address = document.getElementById("address").value.trim();
+  const className = document.getElementById("class-selector").value;
+  const editId = document.getElementById("edit-id").value;
+  let gender = "";
+  if (document.getElementById("male").checked) gender = "1";
+  if (document.getElementById("famale").checked) gender = "2";
 
-    if (document.getElementById('male').checked) {
-        gender = document.getElementById('male').value;
-    } else if (document.getElementById('famale').checked) {
-        gender = document.getElementById('famale').value;
+  let isValid = true;
+  if (fullname.length < 3 || fullname.length > 50) {
+    document.getElementById("fullname-error").textContent = "Tên không hợp lệ"; isValid = false;
+  } else document.getElementById("fullname-error").textContent = "";
+  if (code.length !== 8) {
+    document.getElementById("code-error").textContent = "Mã SV phải 8 ký tự"; isValid = false;
+  } else document.getElementById("code-error").textContent = "";
+  if (!emailIsValid(email)) {
+    document.getElementById("email-error").textContent = "Email không hợp lệ"; isValid = false;
+  } else document.getElementById("email-error").textContent = "";
+  if (!/^\d{10}$/.test(phone)) {
+    document.getElementById("phone-error").textContent = "SĐT phải 10 số"; isValid = false;
+  } else document.getElementById("phone-error").textContent = "";
+  if (isNaN(score) || score < 0 || score > 10) {
+    document.getElementById("score-error").textContent = "Điểm không hợp lệ"; isValid = false;
+  } else document.getElementById("score-error").textContent = "";
+  if (!address) {
+    document.getElementById("address-error").textContent = "Nhập địa chỉ"; isValid = false;
+  } else document.getElementById("address-error").textContent = "";
+  if (!gender) {
+    document.getElementById("gender-error").textContent = "Chọn giới tính"; isValid = false;
+  } else document.getElementById("gender-error").textContent = "";
+
+  if (!isValid) return;
+
+  let students = JSON.parse(localStorage.getItem("students") || "[]");
+
+  if (editId !== "") {
+    students[editId] = { fullname, code, email, phone, address, gender, score, className };
+  } else {
+    if (students.some(s => s.email === email || s.code === code)) {
+      document.getElementById("email-error").textContent = "SV đã tồn tại!";
+      return;
     }
+    students.push({ fullname, code, email, phone, address, gender, score, className });
+  }
 
-    // Validate
-    if (_.isEmpty(fullname) || fullname.trim().length <= 2 || fullname.trim().length > 50) {
-        document.getElementById('fullname-error').innerHTML = 'Họ tên phải từ 3 đến 50 ký tự';
-        fullname = '';
-    } else {
-        document.getElementById('fullname-error').innerHTML = '';
-    }
-
-    if (_.isEmpty(code) || code.trim().length !== 8) {
-        document.getElementById('code-error').innerHTML = 'Mã sinh viên phải có đúng 8 ký tự';
-        code = '';
-    } else {
-        document.getElementById('code-error').innerHTML = '';
-    }
-
-    if (_.isEmpty(email) || !emailIsValid(email)) {
-        document.getElementById('email-error').innerHTML = 'Email không hợp lệ';
-        email = '';
-    } else {
-        document.getElementById('email-error').innerHTML = '';
-    }
-
-    if (_.isEmpty(phone) || !/^\d{10}$/.test(phone.trim())) {
-        document.getElementById('phone-error').innerHTML = 'Số điện thoại phải gồm 10 chữ số';
-        phone = '';
-    } else {
-        document.getElementById('phone-error').innerHTML = '';
-    }
-
-    if (_.isEmpty(address)) {
-        document.getElementById('address-error').innerHTML = 'Vui lòng nhập địa chỉ';
-        address = '';
-    } else {
-        document.getElementById('address-error').innerHTML = '';
-    }
-
-    if (_.isEmpty(gender)) {
-        document.getElementById('gender-error').innerHTML = 'Vui lòng chọn giới tính';
-        gender = '';
-    } else {
-        document.getElementById('gender-error').innerHTML = '';
-    }
-
-    if (_.isEmpty(score) || isNaN(score) || score < 0 || score > 10) {
-        document.getElementById('score-error').innerHTML = 'Điểm phải là số từ 0 đến 10';
-        score = '';
-    } else {
-        document.getElementById('score-error').innerHTML = '';
-    }
-
-    if (fullname && code && email && phone && score && address && gender) {
-        let students = localStorage.getItem('students') ? JSON.parse(localStorage.getItem('students')) : [];
-        let editId = document.getElementById('edit-id').value;
-
-        if (editId !== '') {
-            // Update sinh viên
-            students[editId] = { fullname, code, email, phone, address, gender, score };
-            document.getElementById('save-btn').innerText = 'Thêm mới';
-            document.getElementById('edit-id').value = '';
-        } else {
-            // Kiểm tra trùng email khi thêm mới
-            let emailExists = students.some(student => student.email === email);
-            if (emailExists) {
-                document.getElementById('email-error').innerHTML = 'Email đã tồn tại';
-                return;
-            }
-
-            let phoneExists = students.some(student => student.phone === phone);
-            if (phoneExists) {
-                document.getElementById('phone-error').innerHTML = 'Số điện thoại đã tồn tại';
-                return;
-            }
-
-            students.push({ fullname, code, email, phone, address, gender, score });
-        }
-
-        localStorage.setItem('students', JSON.stringify(students));
-        clearForm();
-        renderListStudent();
-    }
+  localStorage.setItem("students", JSON.stringify(students));
+  closePopup("add-popup");
+  clearForm();
+  renderListStudent();
 }
 
 function clearForm() {
-    document.getElementById('fullname').value = '';
-    document.getElementById('code').value = '';
-    document.getElementById('email').value = '';
-    document.getElementById('phone').value = '';
-    document.getElementById('score').value = '';
-    document.getElementById('address').value = '';
-    document.getElementById('male').checked = false;
-    document.getElementById('famale').checked = false;
-    document.getElementById('edit-id').value = '';
-    document.getElementById('save-btn').innerText = 'Thêm mới';
-    document.getElementById('save-btn').innerText = 'Lưu';
+  ["fullname", "code", "email", "phone", "score", "address"].forEach(id => document.getElementById(id).value = "");
+  document.getElementById("male").checked = false;
+  document.getElementById("famale").checked = false;
+  document.getElementById("edit-id").value = "";
+  document.getElementById("save-btn").innerText = "Lưu";
 }
 
 function renderListStudent() {
-    let students = localStorage.getItem('students') ? JSON.parse(localStorage.getItem('students')) : [];
+  const students = JSON.parse(localStorage.getItem("students") || "[]");
+  const selectedClass = document.getElementById("class-selector").value;
+  const filtered = students.filter(s => s.className === selectedClass);
+  const table = document.getElementById("grid-students");
 
-    let listContainer = document.getElementById('list-student');
+  if (!selectedClass || filtered.length === 0) {
+    table.innerHTML = "<tr><td colspan='9'>Chưa có sinh viên</td></tr>";
+    updateStatistics([]);
+    return;
+  }
 
-    if (students.length === 0) {
-        listContainer.style.display = 'none';
-        document.getElementById('grid-students').innerHTML = ''; // clear bảng
-        return;
-    }
+  let html = `<tr>
+    <th>STT</th><th>Họ tên</th><th>Mã SV</th><th>Email</th><th>SĐT</th>
+    <th>Điểm</th><th>Giới tính</th><th>Địa chỉ</th><th>Hành động</th>
+  </tr>`;
 
-    listContainer.style.display = 'block';
-
-    let tableContent = `<tr>
-        <td width='20'>NO</td>
-        <td>Họ và tên</td>
-        <td>Mã sinh viên</td>
-        <td>Email</td>
-        <td>Điện thoại</td>
-        <td>Điểm</td>
-        <td>Giới tính</td>
-        <td>Địa chỉ</td>
-        <td>Hành động</td>
+  filtered.forEach((sv, i) => {
+    const index = students.findIndex(s => s.email === sv.email);
+    html += `<tr>
+      <td>${i + 1}</td>
+      <td>${sv.fullname}</td>
+      <td>${sv.code}</td>
+      <td>${sv.email}</td>
+      <td>${sv.phone}</td>
+      <td>${sv.score}</td>
+      <td>${sv.gender === "1" ? "Nam" : "Nữ"}</td>
+      <td>${sv.address}</td>
+      <td>
+        <a href="#" onclick="editStudent(${index})">Sửa</a> | 
+        <a href="#" onclick="deleteStudent(${index})">Xóa</a>
+      </td>
     </tr>`;
+  });
 
-    students.forEach((student, index) => {
-        let studentId = index;
-        let genderLabel = parseInt(student.gender) === 1 ? 'Nam' : 'Nữ';
-
-        tableContent += `<tr>
-            <td>${index + 1}</td>
-            <td>${student.fullname}</td>
-            <td>${student.code}</td>
-            <td>${student.email}</td>
-            <td>${student.phone}</td>
-            <td>${student.score || "0"}</td>
-            <td>${genderLabel}</td>
-            <td>${student.address}</td>
-            <td>
-                <a href="#" onclick='editStudent(${studentId})'>Sửa</a> | 
-                <a href="#" onclick='deleteStudent(${studentId})'>Xóa</a> | 
-            </td>
-        </tr>`;
-    });
-
-    document.getElementById('grid-students').innerHTML = tableContent;
-
-    updateStatistics();
+  table.innerHTML = html;
+  updateStatistics(filtered);
 }
 
-function deleteStudent(id) {
-    let students = localStorage.getItem('students') ? JSON.parse(localStorage.getItem('students')) : [];
-    students.splice(id, 1);
-    localStorage.setItem('students', JSON.stringify(students));
+function editStudent(index) {
+  const students = JSON.parse(localStorage.getItem("students") || "[]");
+  const student = students[index];
+  document.getElementById("fullname").value = student.fullname;
+  document.getElementById("code").value = student.code;
+  document.getElementById("email").value = student.email;
+  document.getElementById("phone").value = student.phone;
+  document.getElementById("score").value = student.score;
+  document.getElementById("address").value = student.address;
+  document.getElementById(student.gender === "1" ? "male" : "famale").checked = true;
+  document.getElementById("edit-id").value = index;
+  document.getElementById("save-btn").innerText = "Cập nhật";
+  openPopup("add-popup");
+}
+
+function deleteStudent(index) {
+  const students = JSON.parse(localStorage.getItem("students") || "[]");
+  students.splice(index, 1);
+  localStorage.setItem("students", JSON.stringify(students));
+  renderListStudent();
+}
+
+function renderClassOptions() {
+  const classes = JSON.parse(localStorage.getItem("classes") || "[]");
+  const selector = document.getElementById("class-selector");
+  const currentClass = localStorage.getItem("currentClass");
+
+  selector.innerHTML = '<option value="">-- Chọn lớp --</option>';
+  classes.forEach(cls => {
+    const opt = document.createElement("option");
+    opt.value = cls.tenLop;
+    opt.textContent = cls.tenLop;
+    if (cls.tenLop === currentClass) opt.selected = true;
+    selector.appendChild(opt);
+  });
+
+  selector.onchange = function () {
+    const selected = this.value;
+    localStorage.setItem("currentClass", selected);
+    updateClassInfo(selected);
     renderListStudent();
-    updateStatistics();
+  };
+
+  updateClassInfo(currentClass);
 }
 
-function editStudent(id) {
-    let students = localStorage.getItem('students') ? JSON.parse(localStorage.getItem('students')) : [];
-    let student = students[id];
-
-    document.getElementById('fullname').value = student.fullname;
-    document.getElementById('code').value = student.code;
-    document.getElementById('email').value = student.email;
-    document.getElementById('phone').value = student.phone;
-    document.getElementById('score').value = student.score;
-    document.getElementById('address').value = student.address;
-
-    if (parseInt(student.gender) === 1) {
-        document.getElementById('male').checked = true;
-    } else {
-        document.getElementById('famale').checked = true;
-    }
-
-    document.getElementById('edit-id').value = id;
-    document.getElementById('save-btn').innerText = 'Cập nhật';
-
-    document.getElementById('add-popup').style.display = 'flex';
+function updateClassInfo(className) {
+  const classes = JSON.parse(localStorage.getItem("classes") || "[]");
+  const hocPhanLabel = document.getElementById("hoc-phan-label");
+  const found = classes.find(cls => cls.tenLop === className);
+  hocPhanLabel.textContent = found ? `Học phần: ${found.hocPhan}` : '';
 }
 
-function searchStudents() {
-    const keyword = document.getElementById("search-input").value.toLowerCase();
-    const genderFilter = document.getElementById("gender-filter").value;
-    const students = JSON.parse(localStorage.getItem("students")) || [];
-
-    const filtered = students.filter(student => {
-        const matchText = (
-            student.fullname.toLowerCase().includes(keyword) ||
-            student.email.toLowerCase().includes(keyword) ||
-            student.phone.includes(keyword)
-        );
-
-        const matchGender = genderFilter ? student.gender === genderFilter : true;
-
-        return matchText && matchGender;
-    });
-
-    renderSearchResult(filtered);
-}
-
-function renderSearchResult(filteredStudents) {
-    const table = document.getElementById("search-student-table");
-    const resultDiv = document.getElementById("search-result");
-
-    if (filteredStudents.length === 0) {
-        resultDiv.style.display = "block";
-        table.innerHTML = "<tr><td colspan='7'>Không tìm thấy sinh viên nào</td></tr>";
-        return;
-    }
-
-    resultDiv.style.display = "block";
-
-    let html = `<tr>
-        <td>NO</td>
-        <td>Họ và tên</td>
-        <td>Mã sinh viên</td>
-        <td>Email</td>
-        <td>SĐT</td>
-        <td>Điểm</td>
-        <td>Giới tính</td>
-        <td>Địa chỉ</td>
-    </tr>`;
-
-    filteredStudents.forEach((student, index) => {
-        html += `<tr>
-            <td>${index + 1}</td>
-            <td>${student.fullname}</td>
-            <td>${student.code}</td>
-            <td>${student.email}</td>
-            <td>${student.phone}</td>
-            <td>${student.score}</td>
-            <td>${student.gender == '1' ? 'Nam' : 'Nữ'}</td>
-            <td>${student.address}</td>
-        </tr>`;
-    });
-
-    table.innerHTML = html;
+function updateStatistics(students) {
+  const males = students.filter(s => s.gender === "1").length;
+  const females = students.filter(s => s.gender === "2").length;
+  document.getElementById("male-count").textContent = males;
+  document.getElementById("female-count").textContent = females;
 }
 
 function logout() {
-    // Xác nhận đăng xuất
-    if (confirm("Bạn có chắc chắn muốn đăng xuất?")) {
-        // Xóa dữ liệu đăng nhập nếu có
-        localStorage.removeItem("user");
-        // Chuyển hướng về trang login
-        window.location.href = "../html/login.html";
-    }
-}
-
-function updateStatistics() {
-    const students = getListStudent(); // Hàm này bạn đã dùng trong renderListStudent()
-    const total = students.length;
-    const males = students.filter(s => s.gender === "1").length;
-    const females = students.filter(s => s.gender === "2").length;
-
-    // Cập nhật lên giao diện
-    document.getElementById("total-students").textContent = total;
-    document.getElementById("male-count").textContent = males;
-    document.getElementById("female-count").textContent = females;
-}
-
-function getListStudent() {
-    return localStorage.getItem('students') ? JSON.parse(localStorage.getItem('students')) : [];
-}
-
-function togglePopup(id) {
-    const element = document.getElementById(id);
-    element.classList.toggle("popup-visible");
-}
-
-function showFormPanel() {
-    document.getElementById("form-student-panel").style.display = "block";
-}
-
-function closeFormPanel() {
-    document.getElementById("form-student-panel").style.display = "none";
+  if (confirm("Bạn có chắc chắn muốn đăng xuất?")) {
+    localStorage.removeItem("user");
+    window.location.href = "../html/login.html";
+  }
 }
