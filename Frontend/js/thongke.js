@@ -1,77 +1,95 @@
-function renderStatistics() {
-  const students = JSON.parse(localStorage.getItem('students')) || [];
+// thongke.js - dùng lại biểu đồ Chart.js tương tác
 
-  const categories = {
-    gioi: 0,
-    kha: 0,
-    trungbinh: 0,
-    yeu: 0
-  };
+window.onload = function () {
+  if (!localStorage.getItem("user")) {
+    window.location.href = "../html/login.html";
+    return;
+  }
+  renderClassOptions();
+};
 
-  students.forEach(sv => {
-    const score = parseFloat(sv.score);
-    if (score >= 8) categories.gioi++;
-    else if (score >= 6.5) categories.kha++;
-    else if (score >= 5) categories.trungbinh++;
-    else categories.yeu++;
+function renderClassOptions() {
+  const classes = JSON.parse(localStorage.getItem("classes") || "[]");
+  const selector = document.getElementById("class-selector");
+  const currentClass = localStorage.getItem("currentClass") || "";
+
+  selector.innerHTML = '<option value="">-- Chọn lớp --</option>';
+  classes.forEach(cls => {
+    const opt = document.createElement("option");
+    opt.value = cls.tenLop;
+    opt.textContent = cls.tenLop;
+    if (cls.tenLop === currentClass) opt.selected = true;
+    selector.appendChild(opt);
   });
 
-  const total = students.length;
+  selector.onchange = function () {
+    const selected = this.value;
+    localStorage.setItem("currentClass", selected);
+    renderStatistics();
+  };
 
-  // Hiển thị số lượng
-  document.getElementById("total-students").textContent = total;
-  document.getElementById("gioi").textContent = categories.gioi;
-  document.getElementById("kha").textContent = categories.kha;
-  document.getElementById("trungbinh").textContent = categories.trungbinh;
-  document.getElementById("yeu").textContent = categories.yeu;
+  renderStatistics();
+}
 
-  // Biểu đồ tròn
-  const ctx = document.getElementById('scoreChart').getContext('2d');
-  new Chart(ctx, {
-    type: 'pie',
+function renderStatistics() {
+  const allStudents = JSON.parse(localStorage.getItem("students") || "[]");
+  const selectedClass = localStorage.getItem("currentClass") || "";
+  const students = allStudents.filter(s => s.className === selectedClass);
+
+  document.getElementById("total-students").textContent = students.length;
+
+  let gioi = 0, kha = 0, tb = 0, yeu = 0;
+  students.forEach(sv => {
+    const score = parseFloat(sv.score);
+    if (score >= 8.5) gioi++;
+    else if (score >= 7) kha++;
+    else if (score >= 5) tb++;
+    else yeu++;
+  });
+
+  document.getElementById("gioi-count").textContent = gioi;
+  document.getElementById("kha-count").textContent = kha;
+  document.getElementById("tb-count").textContent = tb;
+  document.getElementById("yeu-count").textContent = yeu;
+
+  const total = students.length || 1;
+  document.getElementById("gioi-pct").textContent = `${((gioi / total) * 100).toFixed(1)}%`;
+  document.getElementById("kha-pct").textContent = `${((kha / total) * 100).toFixed(1)}%`;
+  document.getElementById("tb-pct").textContent = `${((tb / total) * 100).toFixed(1)}%`;
+  document.getElementById("yeu-pct").textContent = `${((yeu / total) * 100).toFixed(1)}%`;
+
+  drawChart(gioi, kha, tb, yeu);
+}
+
+function drawChart(gioi, kha, tb, yeu) {
+  const total = gioi + kha + tb + yeu;
+  const ctx = document.getElementById("chart").getContext("2d");
+  if (window.myChart) window.myChart.destroy();
+  window.myChart = new Chart(ctx, {
+    type: "pie",
     data: {
-      labels: ['Giỏi', 'Khá', 'Trung bình', 'Yếu'],
+      labels: ["Giỏi", "Khá", "Trung bình", "Yếu"],
       datasets: [{
-        label: 'Xếp loại',
-        data: [
-          categories.gioi,
-          categories.kha,
-          categories.trungbinh,
-          categories.yeu
-        ],
-        backgroundColor: ['#28a745', '#007bff', '#ffc107', '#dc3545'],
-        borderWidth: 1
+        data: [gioi, kha, tb, yeu],
+        backgroundColor: ["#2ecc71", "#3498db", "#f1c40f", "#e74c3c"]
       }]
     },
     options: {
       responsive: true,
       plugins: {
-        legend: {
-          position: 'top',
-          labels: {
-            font: {
-              size: 23
-            },
-            color: '#000'
+        legend: { position: "top" },
+        tooltip: {
+          callbacks: {
+            label: function (context) {
+              const value = context.raw;
+              const percent = total > 0 ? ((value / total) * 100).toFixed(1) : 0;
+              return `${context.label}: ${value} (${percent}%)`;
+            }
           }
         }
       }
     }
   });
-
-  // Tính phần trăm
-  const percent = total > 0 ? {
-    gioi: ((categories.gioi / total) * 100).toFixed(1),
-    kha: ((categories.kha / total) * 100).toFixed(1),
-    trungbinh: ((categories.trungbinh / total) * 100).toFixed(1),
-    yeu: ((categories.yeu / total) * 100).toFixed(1)
-  } : { gioi: 0, kha: 0, trungbinh: 0, yeu: 0 };
-
-  // Hiển thị phần trăm
-  document.getElementById("excellent-percent").textContent = percent.gioi + "%";
-  document.getElementById("good-percent").textContent = percent.kha + "%";
-  document.getElementById("average-percent").textContent = percent.trungbinh + "%";
-  document.getElementById("poor-percent").textContent = percent.yeu + "%";
 }
 
 function logout() {
@@ -80,4 +98,3 @@ function logout() {
     window.location.href = "../html/login.html";
   }
 }
-
