@@ -1,4 +1,4 @@
-# BTL-KTPM
+# WEBSITE QUẢN LÝ SINH VIÊN
 
 login account:
 Tên đăng nhập: admin
