@@ -23,5 +23,5 @@ Hệ thống quản lý sinh viên
 
   
 ## login account:
-Tên đăng nhập: admin
-Mật khẩu: 123456
+Tên đăng nhập: giaovien
+Mật khẩu: phenikaa
