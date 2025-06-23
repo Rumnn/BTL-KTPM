@@ -1,5 +1,3 @@
-// File: student.js - Đã sửa lỗi cú pháp và hoạt động chuẩn
-
 window.onload = function () {
   if (!localStorage.getItem("user")) {
     window.location.href = "../html/login.html";
@@ -30,21 +28,27 @@ function save() {
   if (fullname.length < 3 || fullname.length > 50) {
     document.getElementById("fullname-error").textContent = "Tên không hợp lệ"; isValid = false;
   } else document.getElementById("fullname-error").textContent = "";
+
   if (code.length !== 8) {
     document.getElementById("code-error").textContent = "Mã SV phải 8 ký tự"; isValid = false;
   } else document.getElementById("code-error").textContent = "";
+
   if (!emailIsValid(email)) {
     document.getElementById("email-error").textContent = "Email không hợp lệ"; isValid = false;
   } else document.getElementById("email-error").textContent = "";
+
   if (!/^\d{10}$/.test(phone)) {
     document.getElementById("phone-error").textContent = "SĐT phải 10 số"; isValid = false;
   } else document.getElementById("phone-error").textContent = "";
+
   if (isNaN(score) || score < 0 || score > 10) {
     document.getElementById("score-error").textContent = "Điểm không hợp lệ"; isValid = false;
   } else document.getElementById("score-error").textContent = "";
+
   if (!address) {
     document.getElementById("address-error").textContent = "Nhập địa chỉ"; isValid = false;
   } else document.getElementById("address-error").textContent = "";
+
   if (!gender) {
     document.getElementById("gender-error").textContent = "Chọn giới tính"; isValid = false;
   } else document.getElementById("gender-error").textContent = "";
@@ -174,6 +178,53 @@ function updateStatistics(students) {
   const females = students.filter(s => s.gender === "2").length;
   document.getElementById("male-count").textContent = males;
   document.getElementById("female-count").textContent = females;
+  document.getElementById("total-students").textContent = students.length;
+}
+
+function searchStudents() {
+  const keyword = document.getElementById("search-input").value.toLowerCase();
+  const genderFilter = document.getElementById("gender-filter").value;
+  const students = JSON.parse(localStorage.getItem("students") || "[]");
+  const selectedClass = document.getElementById("class-selector").value;
+
+  const filtered = students.filter(student => {
+    const matchClass = student.className === selectedClass;
+    const matchKeyword =
+      student.fullname.toLowerCase().includes(keyword) ||
+      student.email.toLowerCase().includes(keyword) ||
+      student.phone.includes(keyword);
+    const matchGender = genderFilter ? student.gender === genderFilter : true;
+    return matchClass && matchKeyword && matchGender;
+  });
+
+  const table = document.getElementById("search-student-table");
+  const resultDiv = document.getElementById("search-result");
+  resultDiv.style.display = "block";
+
+  if (filtered.length === 0) {
+    table.innerHTML = "<tr><td colspan='8'>Không tìm thấy sinh viên nào.</td></tr>";
+    return;
+  }
+
+  let html = `<tr>
+    <th>STT</th><th>Họ tên</th><th>Mã SV</th><th>Email</th>
+    <th>SĐT</th><th>Điểm</th><th>Giới tính</th><th>Địa chỉ</th>
+  </tr>`;
+
+  filtered.forEach((sv, i) => {
+    html += `<tr>
+      <td>${i + 1}</td>
+      <td>${sv.fullname}</td>
+      <td>${sv.code}</td>
+      <td>${sv.email}</td>
+      <td>${sv.phone}</td>
+      <td>${sv.score}</td>
+      <td>${sv.gender === "1" ? "Nam" : "Nữ"}</td>
+      <td>${sv.address}</td>
+    </tr>`;
+  });
+
+  table.innerHTML = html;
 }
 
 function logout() {
